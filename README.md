@@ -13,13 +13,21 @@ using Cat.Database;
   </connectionStrings>
 ```
 
+## Usage
+
 ```c#
+DbHelper db = new DbHelper();
+
+Repeater1.DataSource = db.GetDataTable("select * from [jobs]");
+Repeater1.DataBind();
+
 SqlParameter par = new SqlParameter("@job_id", 1);
-//DbHelper db = new DbHelper();
-//Repeater1.DataSource = db.GetDataTable("select * from [jobs] ");//where job_id=@job_id", par);
-//Repeater1.DataBind();
-//db.ClearParameters();
-//msg.Text = db.ExecuteScalar<string>("select job_desc from jobs where job_id=@job_id", par);
+msg.Text = db.ExecuteScalar<string>("select job_desc from jobs where job_id=@job_id", par);
+```
+
+### Paging
+
+```c#
 DbPager pager = new DbPager();
 pager.field = "*";
 pager.tableName = "jobs";
@@ -34,10 +42,44 @@ Pager1.RecordCount = pager.pagerCount;
 Repeater1.DataBind();
 ```
 
+### Insert
+
 ```c#
 DbInsert insert = new DbInsert();
 insert.Add("job_desc", TextBox1.Text);
 insert.Add("min_lvl", TextBox2.Text);
 insert.Add("max_lvl", TextBox2.Text);
 insert.Execute("jobs");
+```
+
+### Update
+
+```c#
+DbUpdate update = new DbUpdate();
+update.Add("job_desc", TextBox1.Text);
+update.Add("min_lvl", TextBox2.Text);
+update.Add("max_lvl", TextBox2.Text);
+SqlParameter par = new SqlParameter("@job_id", 1);
+update.Execute("jobs", "where job_id=@job_id", par);
+```
+
+### Transaction
+
+```c#
+DbHelper db = new DbHelper();
+db.BeginTransaction();
+try
+{
+	db.ExecuteNonQuery('sql...1');
+	db.ExecuteNonQuery('sql...2');
+	int a = 0;
+    int b = 1 / a; //exception code
+	db.ExecuteNonQuery('sql...3');
+    db.CommitTransaction();
+}
+catch (System.IO.IOException e)
+{
+	db.RollbackTransaction();   
+}
+
 ```
