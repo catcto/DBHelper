@@ -8,9 +8,9 @@ using Cat.Database;
 
 ```xml
 <connectionStrings>
-    <add name="ConnectionString" connectionString="server=.,1791;uid=xxx;pwd=xxx;database=pubs;trusted_connection=no;MultipleActiveResultSets=true;" providerName="System.Data.SqlClient"/>
-    <!--<add name="ConnectionString" connectionString="Provider=Microsoft.Jet.OLEDB.4.0; Data Source=|DataDirectory|d_b.mdb" providerName="System.Data.OleDb"/>-->
-  </connectionStrings>
+	<add name="ConnectionString" connectionString="server=.,1791;uid=xxx;pwd=xxx;database=pubs;trusted_connection=no;MultipleActiveResultSets=true;" providerName="System.Data.SqlClient"/>
+	<!--<add name="ConnectionString" connectionString="Provider=Microsoft.Jet.OLEDB.4.0; Data Source=|DataDirectory|d_b.mdb" providerName="System.Data.OleDb"/>-->
+</connectionStrings>
 ```
 
 ## Usage
@@ -56,8 +56,6 @@ insert.Execute("jobs");
 
 ```c#
 DbUpdate update = new DbUpdate();
-update.Add("job_desc", TextBox1.Text);
-update.Add("min_lvl", TextBox2.Text);
 update.Add("max_lvl", TextBox2.Text);
 SqlParameter par = new SqlParameter("@job_id", 1);
 update.Execute("jobs", "where job_id=@job_id", par);
@@ -77,7 +75,7 @@ try
 	db.ExecuteNonQuery('sql...3');
     db.CommitTransaction();
 }
-catch (System.IO.IOException e)
+catch (Exception)
 {
 	db.RollbackTransaction();   
 }
